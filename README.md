@@ -10,7 +10,7 @@ algorithms for heterogeneous data with fairness constraints. We will design new 
 to handle heterogeneous financial data distributions. To guarantee different clients receive fair predictions, we will develop random
 matrix-based aggregation methods to prevent privacy leaking in fairness-constrained federated learning.
 
-[Nan Cui](https://www.linkedin.com/in/nan-cui-997aa9212/), Yianni Ypsilantis, Dominick Varano, [Yue Ning](https://yue-ning.github.io/)
+[Nan Cui](https://www.linkedin.com/in/nan-cui-997aa9212/), [Yianni Ypsilantis](https://www.linkedin.com/in/ioannis-ypsilantis-42947b254/), [Dominick Varano](https://www.linkedin.com/in/dominick-varano-697a38241/), [Yue Ning](https://yue-ning.github.io/)
 
 
 ## Requirements
