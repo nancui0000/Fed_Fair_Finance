@@ -47,65 +47,17 @@ For the adult dataset:
 
 Results after 50 global rounds of training:
 
-|---- Avg Train Accuracy: 78.69%
+### Overall and Demographic-Specific Performance
 
------------------------------------------------
-
-|---- Test Accuracy: 76.03%
-
-|---- Test Recall: 0.77
-
-|---- Test F1: 0.60
-
-|---- Test AUC: 0.76
-
-|---- Test Parity: 13.98%
-
-|---- Test Equality: 6.53%
-
------------------------------------------------
-
- Total Run Time: 47.2392
- 
-|---- Test over Females Accuracy: 74.15%
-
-|---- Test over Females Recall: 0.76
-
-|---- Test over Females F1: 0.64
-
-|---- Test over Females AUC: 0.75
-
------------------------------------------------
-
-|---- Test over Males Accuracy: 79.84%
-
-|---- Test over Males Recall: 0.82
-
-|---- Test over Males F1: 0.47
-
-|---- Test over Males AUC: 0.81
-
------------------------------------------------
-
-|---- Test over Income > 50k Accuracy: 76.51%
-
-|---- Test over Income > 50k Recall: 0.77
-
-|---- Test over Income > 50k F1: 0.87
-
-|---- Test over Income > 50k AUC: nan
-
------------------------------------------------
-
-|---- Test over Income < 50k Accuracy: 75.88%
-
-|---- Test over Income < 50k Recall: 0.76
-
-|---- Test over Income < 50k F1: 0.86
-
-|---- Test over Income < 50k AUC: nan
-
------------------------------------------------
+| Metric | Overall | Females | Males | Income > 50k | Income < 50k |
+|--------|---------|---------|-------|--------------|--------------|
+| **Accuracy (%)** | 76.03 | 74.15 | 79.84 | 76.51 | 75.88 |
+| **Recall** | 0.77 | 0.76 | 0.82 | 0.77 | 0.76 |
+| **F1 Score** | 0.60 | 0.64 | 0.47 | 0.87 | 0.86 |
+| **AUC** | 0.76 | 0.75 | 0.81 | N/A | N/A |
+| **Fairness Metrics** | | | | | |
+| **Test Parity (%)** | 13.98 | - | - | - | - |
+| **Test Equality (%)** | 6.53 | - | - | - | - |
 
 ## Cite
 
