@@ -38,7 +38,7 @@ pip install -r requirements.txt
 For the adult dataset:
 
 ```bash
-python src/federated_main.py --model=simple_MLP --dataset=adult --gpu=0 --optimizer=adam --epochs=50 --local_ep=20 --lr=0.001 --sens_drop_flag=1 --aggregate_method=fair --imbalance_method=adasyn --iid=0 --male_to_female_ratio=1 --num_users=100 --loss_type=bce --beta=0.6 --tau=1 --fair_regulization=1
+python src/federated_main.py --model=simple_MLP --dataset=adult --gpu=0 --optimizer=adam --epochs=50 --local_ep=20 --lr=0.001 --sens_drop_flag=1 --aggregate_method=fair --imbalance_method=adasyn --iid=1 --male_to_female_ratio=1 --num_users=100 --loss_type=bce --beta=0.6 --tau=1 --fair_regulization=1
 ```
 
 ## Results
@@ -51,13 +51,13 @@ Results after 50 global rounds of training:
 
 | Metric | Overall | Females | Males | Income > 50k | Income < 50k |
 |--------|---------|---------|-------|--------------|--------------|
-| **Accuracy (%)** | 76.03 | 74.15 | 79.84 | 76.51 | 75.88 |
-| **Recall** | 0.77 | 0.76 | 0.82 | 0.77 | 0.76 |
-| **F1 Score** | 0.60 | 0.64 | 0.47 | 0.87 | 0.86 |
-| **AUC** | 0.76 | 0.75 | 0.81 | N/A | N/A |
+| **Accuracy (%)** | 76.03 | 74.15 | 79.84 | 77.61 |77.61 |
+| **Recall** | 0.77 | 0.76 | 0.82 | 0.78 | 0.62 |
+| **F1 Score** | 0.60 | 0.64 | 0.47 | 0.62 | 0.84 |
+| **AUC** | 0.76 | 0.75 | 0.81 | 0.78 | 0.78 |
 | **Fairness Metrics** | | | | | |
-| **Test Parity (%)** | 13.98 | - | - | - | - |
-| **Test Equality (%)** | 6.53 | - | - | - | - |
+| **Test Parity (%)** | 11.23 | - | - | - | - |
+| **Test Equality (%)** | 8.14 | - | - | - | - |
 
 ## Cite
 
