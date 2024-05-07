@@ -5,7 +5,7 @@
 import numpy as np
 import torch
 import os
-from sklearn.metrics import recall_score, f1_score, roc_auc_score
+from sklearn.metrics import recall_score, f1_score, roc_auc_score, precision_score
 from torch import nn
 import torch.nn.functional as F
 
@@ -160,7 +160,7 @@ class LocalModel(nn.Module):
         return accuracy, loss
 
 
-def test_inference(args, model, X_test, y_test, device):
+def test_inference(args, model, X_test, y_test, device, label=None):
     """
     Returns the test accuracy and loss.
 
@@ -187,7 +187,30 @@ def test_inference(args, model, X_test, y_test, device):
 
     correct = torch.sum(torch.eq(pred_labels, y_test)).item()
 
-    accuracy = correct / len(y_test)
+    if label is not None:
+        condition_pos = (pred_labels == label)
+        condition_true = (y_test == label)
+
+        # Ensure conditions are tensors of dtype torch.bool
+        if not isinstance(condition_pos, torch.Tensor):
+            condition_pos = torch.tensor(condition_pos, dtype=torch.bool, device=device)
+        if not isinstance(condition_true, torch.Tensor):
+            condition_true = torch.tensor(condition_true, dtype=torch.bool, device=device)
+
+        true_positive = torch.sum(torch.logical_and(condition_pos, condition_true)).item()
+        condition_neg = (pred_labels != label)
+        condition_false = (y_test != label)
+
+        # Same checks and conversion for negative conditions
+        if not isinstance(condition_neg, torch.Tensor):
+            condition_neg = torch.tensor(condition_neg, dtype=torch.bool, device=device)
+        if not isinstance(condition_false, torch.Tensor):
+            condition_false = torch.tensor(condition_false, dtype=torch.bool, device=device)
+
+        true_negative = torch.sum(torch.logical_and(condition_neg, condition_false)).item()
+        accuracy = (true_positive + true_negative) / y_test.numel()
+    else:
+        accuracy = correct / len(y_test)
     loss = loss.item()
 
     # Convert the model outputs and the test labels to NumPy arrays
@@ -195,12 +218,20 @@ def test_inference(args, model, X_test, y_test, device):
     labels_numpy = y_test.cpu().numpy()
     preds_numpy = pred_labels.cpu().numpy()
 
-    # Calculate recall, F1-score, and AUC
-    recall = recall_score(labels_numpy, preds_numpy)
-    f1 = f1_score(labels_numpy, preds_numpy)
     if len(unique_labels) > 1:  # Check if there are at least two unique values
         auc = roc_auc_score(labels_numpy, preds_numpy)
     else:
         auc = np.nan
+    # Calculate recall, F1-score, and AUC
+    if label is not None:
+        recall = recall_score(labels_numpy, preds_numpy, labels=[label], average=None)
+        f1 = f1_score(labels_numpy, preds_numpy, labels=[label], average=None)
+        precision = precision_score(labels_numpy, preds_numpy, labels=[label], average=None)
 
-    return accuracy, loss, recall, f1, auc
+        return accuracy, loss, recall[0], f1[0], auc, precision[0]
+    else:
+        recall = recall_score(labels_numpy, preds_numpy)
+        f1 = f1_score(labels_numpy, preds_numpy)
+        precision = precision_score(labels_numpy, preds_numpy)
+
+        return accuracy, loss, recall, f1, auc, precision

@@ -34,19 +34,17 @@ def print_metrics(prefix, accuracy, recall=None, f1=None, auc=None, parity=None,
     print("-----------------------------------------------")
 
 
-def calculate_metrics(X, y, indices=None):
+def calculate_metrics(X, y, label=None, indices=None):
     """
     Calculate metrics for a given dataset
     :param X: dataset features
     :param y: dataset labels
-    :param indices: indices of the dataset to be used
     :return: accuracy, loss, recall, f1, auc
     """
     if indices is not None:
-        X_subset, y_subset = X[indices], y[indices]
-    else:
-        X_subset, y_subset = X, y
-    return test_inference(args, global_model, X_subset, y_subset, device)
+        X, y = X[indices], y[indices]
+
+    return test_inference(args, global_model, X, y, device, label)
 
 
 def calculate_fair_metrics(X, y, sens, indices=None):
@@ -205,8 +203,8 @@ if __name__ == '__main__':
 
     # Test inference after completion of training
     test_metrics = calculate_metrics(X_test, y_test)
-    test_metrics_female = calculate_metrics(X_test, y_test, female_indices)
-    test_metrics_male = calculate_metrics(X_test, y_test, male_indices)
+    test_metrics_female = calculate_metrics(X_test, y_test, None, female_indices)
+    test_metrics_male = calculate_metrics(X_test, y_test, None, male_indices)
 
     # Fairness metrics calculation for specific datasets
     if args.dataset == 'adult' or args.dataset == 'german':
@@ -262,8 +260,8 @@ if __name__ == '__main__':
         results[f"Test AUC ({index_sec})"] = metrics[4]
 
     if args.dataset == 'adult':
-        for index_sec, metrics in [('Income > 50k', calculate_metrics(X_test, y_test, income_more_than_50k_indices)),
-                                   ('Income < 50k', calculate_metrics(X_test, y_test, income_less_than_50k_indices))]:
+        for index_sec, metrics in [('Income > 50k', calculate_metrics(X_test, y_test, label=1)),
+                                   ('Income < 50k', calculate_metrics(X_test, y_test, label=0))]:
             print_metrics(f"Test over {index_sec}", metrics[0], metrics[2], metrics[3], metrics[4])
             results[f"Test Accuracy ({index_sec}) (%)"] = 100 * metrics[0]
             results[f"Test Recall ({index_sec})"] = metrics[2]
